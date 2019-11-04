@@ -1,0 +1,84 @@
+use ADODemo;
+
+create table Product 
+( PID int primary key identity,
+ProdName varchar(40) )
+
+create table Supplier
+( SpID int primary key identity,
+CompanyName varchar(40),
+prod_id int foreign key references Product(PID) ,
+sLocation varchar(30),
+Price float
+)
+
+create table Customer
+( CustId int primary key,
+ProdID int foreign key references Product(PID),
+SuppID int foreign key references Supplier(SpID),
+CustName varchar(40),
+Amount int,
+Total float
+)
+--drop table Customer;
+--select * from Supplier order by prod_id;
+
+create procedure sp_ReadCustomerById(@Id int)
+as
+begin
+select * from Customer where CustId = @Id
+end
+drop procedure sp_ReadCustomerById
+--exec sp_ReadCustomerById 1
+
+CREATE PROCEDURE sp_InsertCustomer(@CId int,@pID int,@sID int,@CName varchar(20), @Amt int, @tot float)
+as
+begin
+insert into Customer values (@CId,@pID,@sID,@CName,@Amt,@tot)
+end
+drop procedure sp_InsertCustomer
+--exec sp_InsertCustomer 4,4,6,'Roy',3,0
+
+create procedure sp_ReadCustomerList
+as
+begin
+select * from Customer 
+end
+--execute sp_ReadCustomerList
+
+create procedure sp_ReadProductList
+as
+begin
+select * from Product 
+end
+
+create procedure sp_ReadSupplier(@piD int)
+as
+begin
+select * from Supplier where prod_id = @piD
+end
+
+create procedure sp_ReadSupplierList
+as 
+begin
+select * from Supplier
+end
+
+create procedure sp_RetrievePrice(@spid int,@prodid int)
+as
+begin
+select Price from Supplier where prod_id = @prodid and SpID = @spid
+end
+--execute sp_RetrievePrice 6,4
+
+create procedure sp_RetrieveProductName (@pro int)
+as
+begin
+select ProdName from Product where PID = @pro
+end
+
+create procedure sp_RetrieveSuppName (@supId int)
+as
+begin
+select CompanyName from Supplier where SpID = @supId
+end
